@@ -9,7 +9,6 @@ class TotalBayar extends Component {
         const totalBayar = this.props.carts.reduce(function (result, item){
             return result  + item.total_harga
         },0)
-        console.log(totalBayar)
         // const {carts} = this.props
         return (
             <div className="fixed-bottom">

@@ -1,9 +1,9 @@
 const authType = {
     SHOW_LOGIN      : 'SHOW_LOGIN',
     SHOW_REGISTER   : 'SHOW_REGISTER',
-    HIDE_REGISTER   : 'HIDE_REGISTER',
+    LOGIN           : 'LOGIN',
     LOGGED          : 'LOGGED',
-    NOT_LOGGED      : 'NOT_LOGGED'
+    REGISTER        : 'REGISTER',
 }
 
 export default authType;

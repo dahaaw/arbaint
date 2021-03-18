@@ -3,11 +3,14 @@ import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
 import {showModal} from '../redux/reducer/auth/auth.action';
 
-import {Login, Register} from './molecule'
+import {Login, Register, NotifModal} from './molecule'
 
 const NavbarComponent = () => {
-    const global = useSelector(state => state.authReducer);
     
+    const global = useSelector(state => state);
+    console.log(global);
+    const auth = global.auth;
+    const general = global.general;
     const dispatch = useDispatch();
     
     const handleBLogin = () => {
@@ -18,7 +21,7 @@ const NavbarComponent = () => {
     }
     return (
         <>
-        <Navbar variant="dark" expand="lg">
+        <Navbar variant="light" bg="transparent" expand="lg" className="py-3">
             <Container>
                 <Navbar.Brand href="#home"><strong>Haiwah</strong></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -34,19 +37,23 @@ const NavbarComponent = () => {
                             <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
-                    <div className="float-right">
-                        <Button onClick={handleBLogin}>
+                    {!auth.logged &&
+                    <div className="float-right row">
+                        <div className="col" style={{cursor:'pointer'}} onClick={handleBLogin}>
                             Login
-                        </Button>
-                        <Button onClick={handleBRegister}>
+                        </div>
+                        <div className="col" style={{cursor:'pointer'}} onClick={handleBRegister}>
                             Register
-                        </Button>
+                        </div>
                     </div>
+                    }
                 </Navbar.Collapse>
             </Container>
         </Navbar>
-        {global.showLogin && <Login />}
-        {global.showRegister && <Register />}
+        
+        {!auth.logged && <Login />}
+        {!auth.logged && <Register />}
+        {general.notif && <NotifModal err={general.notif} />}
         </>
     )
 }

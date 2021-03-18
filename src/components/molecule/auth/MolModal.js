@@ -12,7 +12,7 @@ export default function MolModal({...props}) {
 
   return (
     <div>
-      <Modal show={true} 
+      <Modal show={props.show} 
       onHide={handleClose} 
       centered>
         

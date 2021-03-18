@@ -7,9 +7,9 @@ import {Home, Success, Test} from './pages';
 import {NavbarComponent} from './components';
 
 const App = () => {
+  console.log(process.env.REACT_APP_API_URL)
   return (
     <Provider store={store}>
-      {console.log(store)}
       <BrowserRouter>
         <NavbarComponent />
           <main>
