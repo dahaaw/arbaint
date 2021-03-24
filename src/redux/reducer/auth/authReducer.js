@@ -3,7 +3,8 @@ import authType from './auth.type';
 const initialStateAuth = {
     showLogin: false,
     showRegister: false,
-    logged: false
+    logged: false,
+    name: ''
 }
 
 const authReducer = (state = initialStateAuth, action) => {
@@ -26,7 +27,6 @@ const authReducer = (state = initialStateAuth, action) => {
         case authType.REGISTER:
             return {
                 ...state,
-
             }
         
         default:

@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import {Row, Col, Form, Button} from 'react-bootstrap';
-import {MolModal} from '../';
+import {Row, Col, Form} from 'react-bootstrap';
+import {Modal, Button} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
 import {login, showModal} from '../../../redux/reducer/auth/auth.action';
+import {setLoading} from '../../../redux/reducer/general/general.action';
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -15,9 +16,9 @@ const Login = () => {
     const handlePassword = () => (e) => {
         setPassword(e.target.value)
     }
-    const handleSubmit = () => (e) => {    
-        // console.log(email)
+    const handleSubmit = (e) => {    
         // console.log(password)
+        dispatch(setLoading(true))
         dispatch(login({email,password}));
     }
 
@@ -25,44 +26,54 @@ const Login = () => {
         dispatch(showModal('REGISTER', true));
         dispatch(showModal('LOGIN', false));
     }
+    const handleCancel = () => {
+        dispatch(showModal('LOGIN',false))
+    };
 
-    const {showLogin} = useSelector(state => state.auth);
+    const state = useSelector(state => state);
+    const {showLogin} = state.auth
+    const {loading} = state.general
     return (
-        <MolModal type='LOGIN' show={showLogin}>
+        <Modal
+            title='LOGIN'
+            centered
+            visible={showLogin}
+            // onOk={handleSubmit}
+            onCancel={handleCancel}
+            footer={[
+            <Button key="back" onClick={handleRegister} className="float-left">
+                Register
+            </Button>,
+            <Button key="submit" loading={loading} type="primary" onClick={handleSubmit}>
+                Login
+            </Button>,
+            ]}
+        >
             <Row >
                 <Col>
-                    <div className="text-center my-3">
-                        <h3>Login</h3>
-                    </div>
                     <Form>
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>Username / Email</Form.Label>
-                            <Form.Control type="email" placeholder="Username atau Email" onKeyUp={handleEmail()}/>
+                            <Form.Control size="sm" type="email" placeholder="Username atau Email" onKeyUp={handleEmail()}/>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicPassword">
                             <Form.Label >Password</Form.Label>
-                            <Form.Control type="password" placeholder="Password" onKeyUp={handlePassword()}/>
+                            <Form.Control size="sm" type="password" placeholder="Password" onKeyUp={handlePassword()}/>
                         </Form.Group>
                         {/* <Form.Group controlId="formBasicCheckbox">
                             <Form.Check type="checkbox" label="Check me out" />
                         </Form.Group> */}
-                        <Row className="mt-4 mb-3">
-                            <Col>
-                                <Button variant="text" type="button" onClick={handleRegister}> Daftar</Button>                            
-                            </Col>
-                            <Col>
-                                <Button variant="outline-primary" className="float-right" type="button" onClick={handleSubmit()}>
-                                    Login
-                                </Button>
-                            </Col>
-                        </Row>
                     </Form>
                 </Col>
             </Row>
-        </MolModal>
+        </Modal>
+        // <MolModal 
+        //     type='LOGIN' 
+        //     show={showLogin}>
+            
+        // </MolModal>
         );
-
 }
 
 export default Login;

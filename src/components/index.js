@@ -1,7 +1,4 @@
-import Hasil from './Hasil';
-import ListCategories from './ListCategories';
-import NavbarComponent from './NavbarComponent';
-import Menus from './Menus';
-import TotalBayar from './TotalBayar';
+import NavbarLayout from './layout/Navbar.layout';
+import Layouts from './layout';
 
-export {Hasil, ListCategories, NavbarComponent, Menus, TotalBayar}
+export {NavbarLayout, Layouts}

@@ -4,6 +4,7 @@ const authType = {
     LOGIN           : 'LOGIN',
     LOGGED          : 'LOGGED',
     REGISTER        : 'REGISTER',
+    SET_NAME        : 'SET_NAME'
 }
 
 export default authType;

@@ -1,6 +1,7 @@
 import generalType from './general.types';
 
 const initialState = {
+    loading: false,
     notif: false
 }
 
@@ -10,6 +11,16 @@ const generalReducer = (state = initialState, action) => {
             return {
                 ...state,
                 notif: action.payload
+            }
+        case generalType.SET_LOADING:
+            return {
+                ...state,
+                loading: action.payload
+            }
+        case generalType.SHOWED_NOTIF: 
+            return {
+                ...state,
+                notif: false
             }
         default:
             return state;

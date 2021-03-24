@@ -1,26 +1,38 @@
-import React from 'react';
-import { Provider } from 'react-redux';
+import React, {useEffect} from 'react';
+import { useDispatch } from 'react-redux';
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
-import {store} from './config';
+import Cookies from 'universal-cookie';
+import {Home, Test, Profile} from './pages';
+import {Layouts} from './components';
+import {setLogged} from './redux/reducer/auth/auth.action'
 
-import {Home, Success, Test} from './pages';
-import {NavbarComponent} from './components';
 
 const App = () => {
-  console.log(process.env.REACT_APP_API_URL)
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const cookies = new Cookies();
+    const authed = () => {
+          if(cookies.get('token') === undefined){
+              dispatch(setLogged(false));
+          }else{
+              dispatch(setLogged(true));
+          }
+      }
+      authed()
+  }, [dispatch]);
+
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <NavbarComponent />
-          <main>
-            <Switch>
-              <Route path="/" component={Home} exact/>
-              <Route path="/success" component={Success} exact/>
-              <Route path="/test" component={Test} exact />
-            </Switch>
-          </main>
-      </BrowserRouter>
-    </Provider>
+    <BrowserRouter>
+      <Layouts>
+        <main>
+          <Switch>
+            <Route path="/" component={Home} exact/>
+            <Route path="/profile" component={Profile} exact />
+            <Route path="/test" component={Test} />
+          </Switch>
+        </main>
+      </Layouts>
+    </BrowserRouter>
   );
 }
 

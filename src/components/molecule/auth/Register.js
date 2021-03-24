@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import {Row, Col, Form, Button} from 'react-bootstrap';
-import {MolModal} from '../'
+import {Row, Col, Form} from 'react-bootstrap';
+import {Modal, Button} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
 import {showModal, register} from '../../../redux/reducer/auth/auth.action';
+import {setLoading} from '../../../redux/reducer/general/general.action';
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -17,25 +18,42 @@ const Register = () => {
         dispatch(showModal('REGISTER', false));
     }
     const handleRegister = (e) => {
+        dispatch(setLoading(true))
         e.preventDefault();
         const data = {email,username,fullname,password,repassword,birthdate:'1994-10-04',gender:'L'};
         dispatch(register(data));
     }
-    const {showRegister} = useSelector(state => state.auth);
+    const handleCancel = () => {
+        dispatch(showModal('REGISTER',false))
+    };
+    const glob = useSelector(state => state);
+    const {showRegister} = glob.auth;
+    const {loading} = glob.general;
     return (
-        <MolModal type='REGISTER' show={showRegister}>
+        <Modal
+            title="REGISTER"
+            centered
+            visible={showRegister}
+            onOk={handleRegister}
+            onCancel={handleCancel}
+            footer={[
+            <Button key="back" onClick={handleLogin} className="float-left">
+                Login
+            </Button>,
+            <Button key="submit" loading={loading} type="primary" onClick={handleRegister}>
+                Register
+            </Button>,
+            ]}
+        >
             <Row>
                 <Col>
-                <div className="text-center my-3">
-                    <h3>Register</h3>
-                </div>
                 <Form>
                     <Form.Group controlId="username">
                         <Form.Label>Username</Form.Label>
                         {/* <Form.Text className="text-danger float-right">
                             usenam sudah terdaftar
                         </Form.Text> */}
-                        <Form.Control type="username" placeholder="Username" onChange={(e) => {setUsername(e.target.value)}}/>
+                        <Form.Control size="sm" type="username" placeholder="Username" onChange={(e) => {setUsername(e.target.value)}}/>
                     </Form.Group>
 
                     <Form.Group controlId="email">
@@ -43,7 +61,7 @@ const Register = () => {
                         {/* <Form.Text className="text-danger float-right">
                             email sudah terdaftar
                         </Form.Text> */}
-                        <Form.Control type="email" placeholder="Email aktif" onChange={(e) => {setEmail(e.target.value)}}/>
+                        <Form.Control size="sm" type="email" placeholder="Email aktif" onChange={(e) => {setEmail(e.target.value)}}/>
                     </Form.Group>
 
                     <Form.Group controlId="fullname">
@@ -51,34 +69,23 @@ const Register = () => {
                         {/* <Form.Text className="text-danger float-right">
                             usenam sudah terdaftar
                         </Form.Text> */}
-                        <Form.Control type="text" placeholder="Nama lengkap" onChange={(e) => {setFullname(e.target.value)}}/>
+                        <Form.Control size="sm" type="text" placeholder="Nama lengkap" onChange={(e) => {setFullname(e.target.value)}}/>
                     </Form.Group>
 
                     <Form.Group controlId="password">
                         <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" onChange={(e) => {setPassword(e.target.value)}}/>
+                        <Form.Control size="sm" type="password" placeholder="Password" onChange={(e) => {setPassword(e.target.value)}}/>
                     </Form.Group>
 
                     <Form.Group controlId="repassword">
                         <Form.Label>Konfirmasi Password</Form.Label>
-                        <Form.Control type="password" placeholder="Konfirmasi password" onChange={(e) => {setRepassword(e.target.value)}}/>
+                        <Form.Control size="sm" type="password" placeholder="Konfirmasi password" onChange={(e) => {setRepassword(e.target.value)}}/>
                     </Form.Group>
-
-                    <Row className="mt-4 mb-3">
-                        <Col>
-                            <Button variant="text" type="button" onClick={handleLogin}>Login</Button>                            
-                        </Col>
-                        <Col>
-                            <Button variant="outline-primary" type="button" className="float-right" onClick={handleRegister}>
-                                Daftar
-                            </Button>
-                        </Col>
-                    </Row>
                     
                 </Form>   
                 </Col>
             </Row>
-            </MolModal>
+        </Modal>
     );
 };
 
