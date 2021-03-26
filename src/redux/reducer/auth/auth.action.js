@@ -4,7 +4,8 @@ import {constant} from '../../../config';
 import qs from 'qs';
 import Cookies from 'universal-cookie';
 import { addNotif, setLoading } from '../general/general.action';
-
+import { setProfile } from '../user/user.action';
+const cookies = new Cookies();
 const {apiUrl} = constant;
 
 export const showModal = (what,bool) => (dispatch) => {
@@ -32,27 +33,17 @@ export const login = (val) => (dispatch) => {
     .post(apiUrl+"v1/auth/login", dataLogin, config)
     .then((data) => {
         console.log(data)
-        const cookies = new Cookies();
         if(data.data.access_token){
             cookies.set('token', data.data.access_token)
-            dispatch({
-                type: authType.LOGGED,
-                payload: val
-            })
-            dispatch({
-                type: authType.SHOW_LOGIN,
-                payload: false
-            })
-            dispatch({
-                type: authType.SHOW_REGISTER,
-                payload: false
-            })
-            dispatch(addNotif('success','berhasil login'))
+            dispatch(tokenCheck());
+            dispatch({type:authType.LOGGED_IN})
+            dispatch(addNotif('success','berhasil login'));
+            dispatch(addNotif(false,false));
         }else{
-            dispatch(addNotif('warning',data.data.message[0]))
+            dispatch(addNotif('warning',data.data.message[0]));
         }
         setTimeout(() => {
-            dispatch(setLoading(false))
+            dispatch(setLoading(false));
         }, 1000);
     })
     .catch((err) => {
@@ -65,6 +56,10 @@ export const login = (val) => (dispatch) => {
 }
 
 export const setLogged = (val) => (dispatch) => {
+    if(!val){
+        cookies.remove('token')
+        dispatch(setProfile(false))
+    }
     dispatch({
         type: authType.LOGGED,
         payload: val
@@ -104,5 +99,21 @@ export const register = (val) => (dispatch) => {
     })
     .catch((err) => {
         console.log({err})
+    })
+}
+
+export const tokenCheck = () => (dispatch) => {
+    const config = {
+        headers: {Authorization: `Bearer ${cookies.get('token')}`}
+    }
+    axios
+    .get(constant.apiUrl+"v1/user/profile",config)
+    .then((data) => {
+        if(data.data.success){
+            dispatch(setProfile(data.data.data))
+            dispatch(setLogged(true));
+        }else{
+            dispatch(setLogged(false));                  
+        }
     })
 }

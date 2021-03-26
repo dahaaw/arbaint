@@ -10,7 +10,7 @@ export default function NotifModal() {
   }
   const {notif} = useSelector(state => state.general)
   return (
-    <div style={{zIndex:5}}>
+    <div style={{zIndex:3}}>
       {notification[notif.type]({
         message: notif.text,
         // description: notif.text,
@@ -19,7 +19,7 @@ export default function NotifModal() {
       })}
     {setTimeout(() => {
       handleClose()
-    }, 500)}
+    }, 10)}
     </div>
   );
 }

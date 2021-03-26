@@ -3,6 +3,7 @@ const authType = {
     SHOW_REGISTER   : 'SHOW_REGISTER',
     LOGIN           : 'LOGIN',
     LOGGED          : 'LOGGED',
+    LOGGED_IN       : 'LOGGED_IN',
     REGISTER        : 'REGISTER',
     SET_NAME        : 'SET_NAME'
 }

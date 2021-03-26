@@ -19,6 +19,13 @@ const authReducer = (state = initialStateAuth, action) => {
                 ...state,
                 logged: action.payload
             }
+        case authType.LOGGED_IN:
+            return {
+                ...state,
+                logged: false,
+                showLogin: false,
+                showRegister: false
+            }
         case authType.SHOW_REGISTER:
             return {
                 ...state,

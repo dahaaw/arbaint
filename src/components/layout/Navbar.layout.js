@@ -12,6 +12,7 @@ const NavbarLayout = () => {
     console.log(global);
     const auth = global.auth;
     const general = global.general;
+    const {profile} = global.user
     const dispatch = useDispatch();
     const cookies = new Cookies();
     
@@ -29,7 +30,7 @@ const NavbarLayout = () => {
     }
     return (
         <>
-        <Navbar variant="light" bg="white" expand="lg" fixed="top" style={{zIndex:10,height:'60px'}}>
+        <Navbar variant="light" bg="white" className="shadow" expand="lg" fixed="top" style={{zIndex:3,height:'60px'}}>
             <Container>
                 <Navbar.Brand as={Link} to="/"><strong>Haiwah</strong></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -38,7 +39,7 @@ const NavbarLayout = () => {
                     {!auth.logged && <Nav.Link onClick={handleBRegister}>Register</Nav.Link> }
                     {!auth.logged && <Nav.Link onClick={handleBLogin}>Login</Nav.Link> }
                     {auth.logged &&
-                        <NavDropdown title="User " id="basic-nav-dropdown">
+                        <NavDropdown title={profile.fullname} id="basic-nav-dropdown">
                             <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
